@@ -23,3 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("checkStep", (step) => {
+  cy.get("div.ant-steps")
+    .find("div.ant-steps-item")
+    .eq(step)
+    .should("have.class", "ant-steps-item-finish");
+});

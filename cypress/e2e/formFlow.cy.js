@@ -24,12 +24,7 @@ const { formattedToday } = getToday();
 
 describe("Complete form", () => {
   //check after finish a step
-  Cypress.Commands.add("checkStep", (step) => {
-    cy.get("div.ant-steps")
-      .find("div.ant-steps-item")
-      .eq(step)
-      .should("have.class", "ant-steps-item-finish");
-  });
+
   it("should visit page and complete form", () => {
     cy.visit(url);
     cy.wait(1000);
