@@ -20,11 +20,14 @@ const numberOfBranch = 2;
 
 const paymentMethod = ["Thanh toán trả trước", "Thanh toán trả sau"];
 
+const url = Cypress.env("WEB_URL");
+console.log(url);
+
 const { formattedToday } = getToday();
 
 describe("Complete form", () => {
   it("should complete form", () => {
-    cy.visit("http://210.211.97.224:3032");
+    cy.visit(url);
     cy.wait(1000);
 
     cy.contains("button", "Mua ngay").click();
