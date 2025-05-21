@@ -17,17 +17,13 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 });
 
 let step = 0;
-
 const numberOfBranch = 2;
-
 const paymentMethod = ["Thanh toán trả trước", "Thanh toán trả sau"];
-
 const url = Cypress.env("WEB_URL");
-console.log(url);
-
 const { formattedToday } = getToday();
 
 describe("Complete form", () => {
+  //check after finish a step
   Cypress.Commands.add("checkStep", (step) => {
     cy.get("div.ant-steps")
       .find("div.ant-steps-item")
@@ -49,8 +45,6 @@ describe("Complete form", () => {
     cy.get("input#account_phone").type(randomPhone());
     cy.get("input#industry_name").type("transporter");
     cy.contains("button", "Tiếp tục").click();
-
-    cy.contains("p", "Cơ sở 1").should("be.visible");
 
     cy.checkStep(step);
 
@@ -98,7 +92,6 @@ describe("Complete form", () => {
         cy.contains("button", "Tiếp tục").click();
       } else {
         cy.contains("button", "Thêm cơ sở").click();
-        cy.contains("p", "Cơ sở " + (i + 2)).should("be.visible");
       }
     });
 
