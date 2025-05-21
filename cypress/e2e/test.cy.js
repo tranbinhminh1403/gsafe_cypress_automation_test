@@ -16,6 +16,8 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return true;
 });
 
+let step = 0;
+
 const numberOfBranch = 2;
 
 const paymentMethod = ["Thanh toán trả trước", "Thanh toán trả sau"];
@@ -26,7 +28,13 @@ console.log(url);
 const { formattedToday } = getToday();
 
 describe("Complete form", () => {
-  it("should complete form", () => {
+  Cypress.Commands.add("checkStep", (step) => {
+    cy.get("div.ant-steps")
+      .find("div.ant-steps-item")
+      .eq(step)
+      .should("have.class", "ant-steps-item-finish");
+  });
+  it("should visit page and complete form", () => {
     cy.visit(url);
     cy.wait(1000);
 
@@ -44,7 +52,10 @@ describe("Complete form", () => {
 
     cy.contains("p", "Cơ sở 1").should("be.visible");
 
+    cy.checkStep(step);
+
     //step 2: accept multiple branch
+    step += 1;
     [...Array(numberOfBranch).keys()].forEach((i) => {
       const { province, district, ward } = getLocation();
       // locale
@@ -91,7 +102,10 @@ describe("Complete form", () => {
       }
     });
 
+    cy.checkStep(step);
+
     //step 3
+    step += 1;
     cy.get("p")
       .filter(":contains('Cơ sở')")
       .should("have.length", numberOfBranch);
@@ -115,7 +129,10 @@ describe("Complete form", () => {
     });
     cy.contains("button", "Tiếp tục").click();
 
+    cy.checkStep(step);
+
     //step 4
+    step += 1;
     [...Array(numberOfBranch).keys()].forEach((i) => {
       [...Array(2).keys()].forEach((j) => {
         cy.get(
@@ -127,6 +144,8 @@ describe("Complete form", () => {
       });
     });
     cy.contains("button", "Tiếp tục").click();
+
+    cy.checkStep(step);
 
     //step 5
     cy.contains(
