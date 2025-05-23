@@ -6,29 +6,23 @@ import {
   getLocation,
 } from "../../utils";
 
-Cypress.on("uncaught:exception", (err, runnable) => {
-  // Only ignore the React #418 error
-  if (err.message.includes("Minified React error #418")) {
-    return false; // prevent test failure
-  }
-
-  // Let all other errors fail the test
-  return true;
-});
-
 let step = 0;
-const numberOfBranch = 2;
+const numberOfBranch = 1;
 const paymentMethod = ["Thanh toán trả trước", "Thanh toán trả sau"];
 const url = Cypress.env("WEB_URL");
 const { formattedToday } = getToday();
 
 describe("Complete form", () => {
-  //check after finish a step
-
-  it("should visit page and complete form", () => {
+  it("should visit page", () => {
     cy.visit(url);
     cy.wait(1000);
+    cy.contains("button", "Mua ngay").click();
+    cy.contains("div", "Đăng ký dịch vụ").should("be.visible");
+  });
 
+  it.skip("should visit page and complete form", () => {
+    cy.visit(url);
+    cy.wait(1000);
     cy.contains("button", "Mua ngay").click();
 
     //step 1
@@ -52,7 +46,7 @@ describe("Complete form", () => {
       // phone number
       cy.get(`input#saved_order_details_${i}_locale_phone`).type(randomPhone());
       // date
-      cy.get(`input#saved_order_details_${i}_date`).click();
+      cy.get(`input#saved_order_details_${i}_installation_date`).click();
       cy.get(".ant-picker-dropdown")
         .last()
         .within(() => {

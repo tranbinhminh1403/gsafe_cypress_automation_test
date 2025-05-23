@@ -14,4 +14,12 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import "./commands";
+
+Cypress.on("uncaught:exception", (err, runnable) => {
+  if (err.message.includes("Minified React error #418")) {
+    return false; // prevent test failure
+  }
+
+  return true; // Let all other errors fail
+});
